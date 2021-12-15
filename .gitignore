@@ -38,4 +38,4 @@ notes
 
 **/.terratest/*
 **/*.tfvars
-**/*.tfstate
+**/*.tfstate*
