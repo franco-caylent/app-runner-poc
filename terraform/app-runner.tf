@@ -1,9 +1,10 @@
 resource "aws_apprunner_service" "poc" {
-  service_name = "app-runner"
+  service_name = "app-runner-poc"
 
   source_configuration {
       
     authentication_configuration {
+        //access_role_arn = "arn:aws:iam::131578276461:role/service-role/AppRunnerECRAccessRole"
         access_role_arn = aws_iam_role.registry.arn
     }
     
@@ -11,7 +12,7 @@ resource "aws_apprunner_service" "poc" {
       image_configuration {
         port = "8080"
       }
-      image_identifier      = "${aws_ecr_repository.poc.repository_url}:v1"
+      image_identifier      = "${aws_ecr_repository.poc.repository_url}:v2"
       image_repository_type = "ECR"
     }
   }
@@ -20,6 +21,9 @@ resource "aws_apprunner_service" "poc" {
     cpu = "1 vCPU"
     memory = "2048"
   }
+  depends_on = [
+    aws_iam_role.registry
+  ]
 
   tags = {
     Name = "example-apprunner-service"

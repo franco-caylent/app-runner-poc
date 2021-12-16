@@ -1,9 +1,3 @@
-/*
-resource "aws_ecrpublic_repository" "poc" {
-
-  repository_name = "app-runner"
-}
-*/
 resource "aws_ecr_repository" "poc" {
   name                 = "app-runner"
   image_tag_mutability = "MUTABLE"
@@ -30,25 +24,5 @@ resource "aws_iam_role" "registry" {
   ]
 }
 EOF
-  managed_policy_arns = toset([aws_iam_policy.registry_all.arn])
-}
-
-resource "aws_iam_policy" "registry_all" {
-  name   = "poc-apprunner-registry-all"
-  path   = "/"
-  policy = data.aws_iam_policy_document.registry_iam.json
-}
-
-data "aws_iam_policy_document" "registry_iam" {
-  statement {
-    sid = "1"
-    actions = [
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:BatchGetImage",
-      "ecr:DescribeImages",
-      "ecr:GetAuthorizationToken",
-      "ecr:BatchCheckLayerAvailability"
-    ]
-    resources = ["*"]
-  }
+  managed_policy_arns = toset(["arn:aws:iam::aws:policy/service-role/AWSAppRunnerServicePolicyForECRAccess"])
 }
